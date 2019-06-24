@@ -1,0 +1,582 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BF1180E422C0BA4300D3353C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1180E322C0BA4300D3353C /* AppDelegate.swift */; };
+		BF1180E622C0BA4300D3353C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1180E522C0BA4300D3353C /* ViewController.swift */; };
+		BF1180E822C0BA4400D3353C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF1180E722C0BA4400D3353C /* Assets.xcassets */; };
+		BF1180EB22C0BA4400D3353C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF1180E922C0BA4400D3353C /* Main.storyboard */; };
+		BF1180F722C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1180F622C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorTests.swift */; };
+		BF11810222C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11810122C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BF1180F322C0BA4400D3353C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BF1180D822C0BA4300D3353C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BF1180DF22C0BA4300D3353C;
+			remoteInfo = "Anroid Debug Brige Connector";
+		};
+		BF1180FE22C0BA4400D3353C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BF1180D822C0BA4300D3353C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BF1180DF22C0BA4300D3353C;
+			remoteInfo = "Anroid Debug Brige Connector";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		BF1180E022C0BA4300D3353C /* Anroid Debug Brige Connector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Anroid Debug Brige Connector.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF1180E322C0BA4300D3353C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BF1180E522C0BA4300D3353C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		BF1180E722C0BA4400D3353C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BF1180EA22C0BA4400D3353C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BF1180EC22C0BA4400D3353C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BF1180ED22C0BA4400D3353C /* Anroid_Debug_Brige_Connector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Anroid_Debug_Brige_Connector.entitlements; sourceTree = "<group>"; };
+		BF1180F222C0BA4400D3353C /* Anroid Debug Brige ConnectorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Anroid Debug Brige ConnectorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF1180F622C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anroid_Debug_Brige_ConnectorTests.swift; sourceTree = "<group>"; };
+		BF1180F822C0BA4400D3353C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BF1180FD22C0BA4400D3353C /* Anroid Debug Brige ConnectorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Anroid Debug Brige ConnectorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF11810122C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anroid_Debug_Brige_ConnectorUITests.swift; sourceTree = "<group>"; };
+		BF11810322C0BA4400D3353C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BF1180DD22C0BA4300D3353C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF1180EF22C0BA4400D3353C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF1180FA22C0BA4400D3353C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BF1180D722C0BA4300D3353C = {
+			isa = PBXGroup;
+			children = (
+				BF1180E222C0BA4300D3353C /* Anroid Debug Brige Connector */,
+				BF1180F522C0BA4400D3353C /* Anroid Debug Brige ConnectorTests */,
+				BF11810022C0BA4400D3353C /* Anroid Debug Brige ConnectorUITests */,
+				BF1180E122C0BA4300D3353C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BF1180E122C0BA4300D3353C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BF1180E022C0BA4300D3353C /* Anroid Debug Brige Connector.app */,
+				BF1180F222C0BA4400D3353C /* Anroid Debug Brige ConnectorTests.xctest */,
+				BF1180FD22C0BA4400D3353C /* Anroid Debug Brige ConnectorUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BF1180E222C0BA4300D3353C /* Anroid Debug Brige Connector */ = {
+			isa = PBXGroup;
+			children = (
+				BF1180E322C0BA4300D3353C /* AppDelegate.swift */,
+				BF1180E522C0BA4300D3353C /* ViewController.swift */,
+				BF1180E722C0BA4400D3353C /* Assets.xcassets */,
+				BF1180E922C0BA4400D3353C /* Main.storyboard */,
+				BF1180EC22C0BA4400D3353C /* Info.plist */,
+				BF1180ED22C0BA4400D3353C /* Anroid_Debug_Brige_Connector.entitlements */,
+			);
+			path = "Anroid Debug Brige Connector";
+			sourceTree = "<group>";
+		};
+		BF1180F522C0BA4400D3353C /* Anroid Debug Brige ConnectorTests */ = {
+			isa = PBXGroup;
+			children = (
+				BF1180F622C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorTests.swift */,
+				BF1180F822C0BA4400D3353C /* Info.plist */,
+			);
+			path = "Anroid Debug Brige ConnectorTests";
+			sourceTree = "<group>";
+		};
+		BF11810022C0BA4400D3353C /* Anroid Debug Brige ConnectorUITests */ = {
+			isa = PBXGroup;
+			children = (
+				BF11810122C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift */,
+				BF11810322C0BA4400D3353C /* Info.plist */,
+			);
+			path = "Anroid Debug Brige ConnectorUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BF1180DF22C0BA4300D3353C /* Anroid Debug Brige Connector */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF11810622C0BA4400D3353C /* Build configuration list for PBXNativeTarget "Anroid Debug Brige Connector" */;
+			buildPhases = (
+				BF1180DC22C0BA4300D3353C /* Sources */,
+				BF1180DD22C0BA4300D3353C /* Frameworks */,
+				BF1180DE22C0BA4300D3353C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Anroid Debug Brige Connector";
+			productName = "Anroid Debug Brige Connector";
+			productReference = BF1180E022C0BA4300D3353C /* Anroid Debug Brige Connector.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BF1180F122C0BA4400D3353C /* Anroid Debug Brige ConnectorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF11810922C0BA4400D3353C /* Build configuration list for PBXNativeTarget "Anroid Debug Brige ConnectorTests" */;
+			buildPhases = (
+				BF1180EE22C0BA4400D3353C /* Sources */,
+				BF1180EF22C0BA4400D3353C /* Frameworks */,
+				BF1180F022C0BA4400D3353C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF1180F422C0BA4400D3353C /* PBXTargetDependency */,
+			);
+			name = "Anroid Debug Brige ConnectorTests";
+			productName = "Anroid Debug Brige ConnectorTests";
+			productReference = BF1180F222C0BA4400D3353C /* Anroid Debug Brige ConnectorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BF1180FC22C0BA4400D3353C /* Anroid Debug Brige ConnectorUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF11810C22C0BA4400D3353C /* Build configuration list for PBXNativeTarget "Anroid Debug Brige ConnectorUITests" */;
+			buildPhases = (
+				BF1180F922C0BA4400D3353C /* Sources */,
+				BF1180FA22C0BA4400D3353C /* Frameworks */,
+				BF1180FB22C0BA4400D3353C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF1180FF22C0BA4400D3353C /* PBXTargetDependency */,
+			);
+			name = "Anroid Debug Brige ConnectorUITests";
+			productName = "Anroid Debug Brige ConnectorUITests";
+			productReference = BF1180FD22C0BA4400D3353C /* Anroid Debug Brige ConnectorUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BF1180D822C0BA4300D3353C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "Manuel Hahn";
+				TargetAttributes = {
+					BF1180DF22C0BA4300D3353C = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					BF1180F122C0BA4400D3353C = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = BF1180DF22C0BA4300D3353C;
+					};
+					BF1180FC22C0BA4400D3353C = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = BF1180DF22C0BA4300D3353C;
+					};
+				};
+			};
+			buildConfigurationList = BF1180DB22C0BA4300D3353C /* Build configuration list for PBXProject "Anroid Debug Brige Connector" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BF1180D722C0BA4300D3353C;
+			productRefGroup = BF1180E122C0BA4300D3353C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BF1180DF22C0BA4300D3353C /* Anroid Debug Brige Connector */,
+				BF1180F122C0BA4400D3353C /* Anroid Debug Brige ConnectorTests */,
+				BF1180FC22C0BA4400D3353C /* Anroid Debug Brige ConnectorUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BF1180DE22C0BA4300D3353C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF1180E822C0BA4400D3353C /* Assets.xcassets in Resources */,
+				BF1180EB22C0BA4400D3353C /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF1180F022C0BA4400D3353C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF1180FB22C0BA4400D3353C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BF1180DC22C0BA4300D3353C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF1180E622C0BA4300D3353C /* ViewController.swift in Sources */,
+				BF1180E422C0BA4300D3353C /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF1180EE22C0BA4400D3353C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF1180F722C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF1180F922C0BA4400D3353C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF11810222C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BF1180F422C0BA4400D3353C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF1180DF22C0BA4300D3353C /* Anroid Debug Brige Connector */;
+			targetProxy = BF1180F322C0BA4400D3353C /* PBXContainerItemProxy */;
+		};
+		BF1180FF22C0BA4400D3353C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF1180DF22C0BA4300D3353C /* Anroid Debug Brige Connector */;
+			targetProxy = BF1180FE22C0BA4400D3353C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BF1180E922C0BA4400D3353C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF1180EA22C0BA4400D3353C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BF11810422C0BA4400D3353C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BF11810522C0BA4400D3353C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		BF11810722C0BA4400D3353C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Anroid Debug Brige Connector/Anroid_Debug_Brige_Connector.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = F9JP96DAHT;
+				INFOPLIST_FILE = "Anroid Debug Brige Connector/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "hahn.Anroid-Debug-Brige-Connector";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		BF11810822C0BA4400D3353C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Anroid Debug Brige Connector/Anroid_Debug_Brige_Connector.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = F9JP96DAHT;
+				INFOPLIST_FILE = "Anroid Debug Brige Connector/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "hahn.Anroid-Debug-Brige-Connector";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		BF11810A22C0BA4400D3353C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = F9JP96DAHT;
+				INFOPLIST_FILE = "Anroid Debug Brige ConnectorTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "hahn.Anroid-Debug-Brige-ConnectorTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anroid Debug Brige Connector.app/Contents/MacOS/Anroid Debug Brige Connector";
+			};
+			name = Debug;
+		};
+		BF11810B22C0BA4400D3353C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = F9JP96DAHT;
+				INFOPLIST_FILE = "Anroid Debug Brige ConnectorTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "hahn.Anroid-Debug-Brige-ConnectorTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anroid Debug Brige Connector.app/Contents/MacOS/Anroid Debug Brige Connector";
+			};
+			name = Release;
+		};
+		BF11810D22C0BA4400D3353C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = F9JP96DAHT;
+				INFOPLIST_FILE = "Anroid Debug Brige ConnectorUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "hahn.Anroid-Debug-Brige-ConnectorUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Anroid Debug Brige Connector";
+			};
+			name = Debug;
+		};
+		BF11810E22C0BA4400D3353C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = F9JP96DAHT;
+				INFOPLIST_FILE = "Anroid Debug Brige ConnectorUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "hahn.Anroid-Debug-Brige-ConnectorUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Anroid Debug Brige Connector";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BF1180DB22C0BA4300D3353C /* Build configuration list for PBXProject "Anroid Debug Brige Connector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF11810422C0BA4400D3353C /* Debug */,
+				BF11810522C0BA4400D3353C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF11810622C0BA4400D3353C /* Build configuration list for PBXNativeTarget "Anroid Debug Brige Connector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF11810722C0BA4400D3353C /* Debug */,
+				BF11810822C0BA4400D3353C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF11810922C0BA4400D3353C /* Build configuration list for PBXNativeTarget "Anroid Debug Brige ConnectorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF11810A22C0BA4400D3353C /* Debug */,
+				BF11810B22C0BA4400D3353C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF11810C22C0BA4400D3353C /* Build configuration list for PBXNativeTarget "Anroid Debug Brige ConnectorUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF11810D22C0BA4400D3353C /* Debug */,
+				BF11810E22C0BA4400D3353C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BF1180D822C0BA4300D3353C /* Project object */;
+}
