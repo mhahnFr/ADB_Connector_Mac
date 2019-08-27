@@ -25,31 +25,67 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var blinkON = false
     /// Der Zähler für das Erfolgsblinken.
     var greenCounter = 0
+    /// Der Knopf zum direkten Verbinden über (W)LAN.
+    var skipButton: NSButton?
     /// Der LAN-Port, der zur (W)LAN-Verbindung auf dem Androidgerät geöffnet werden soll.
     let lanPort = 5555
     /// Die zuletzt durchgeführte Aktion.
     var lastAction: Action? = nil
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        //startTerminal()
         let s = NSScreen.main?.frame
-        window = NSWindow(contentRect: NSMakeRect(/*s?.origin.x ?? */0, /*s?.height ?? */500, 685, 60), styleMask: NSWindow.StyleMask(rawValue: 0), backing: NSWindow.BackingStoreType.buffered, defer: true)
-        window.title = "Verbinden..."
+        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, /*s?.height ?? */500, 685, 60), styleMask: NSWindow.StyleMask(rawValue: 0), backing: NSWindow.BackingStoreType.buffered, defer: true)
+        window.title = "ADB Connector"
         label = NSTextField(frame: NSMakeRect(0, 0, 680, 20))
         label.isBezeled = false
         label.isEditable = false
         label.stringValue = "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen."
         label.sizeToFit()
         let abortButton = NSButton(title: "Abbrechen", target: nil, action: #selector(abort))
-        let skipButton = NSButton(title: ">>", target: self, action: #selector(skip))
-        let gridButtons = NSStackView(views: [abortButton, skipButton])
+        skipButton = NSButton(title: ">>", target: self, action: #selector(skip))
+        let gridButtons = NSStackView(views: [abortButton, skipButton!])
         gridButtons.orientation = .horizontal
         let mainGrid = NSStackView(views: [label, gridButtons])
         mainGrid.orientation = .vertical
         window.contentView = mainGrid
         window.makeKeyAndOrderFront(self)
+        
+        // NUR ZUM AUFBAUEN!
+        let standardAction = #selector(menuChoosen)
+        // Das erste NSMenu ist die Menüzeile
+        let menubar = NSMenu()
+        
+        // In die Menüzeile werden die Menüs als NSMenuItem mit submenu eingefügt
+        let applicationMenuBar = NSMenuItem(title: "Application", action: nil, keyEquivalent: "")
+        menubar.addItem(applicationMenuBar)
+        let applicationMenu = NSMenu()
+        applicationMenuBar.submenu = applicationMenu
+        let applicationMenuServices = NSMenu()
+        NSApp.servicesMenu = applicationMenuServices
+        applicationMenu.addItem(withTitle: "Über ADB Connector", action: standardAction, keyEquivalent: "")
+        applicationMenu.addItem(NSMenuItem.separator())
+        applicationMenu.addItem(withTitle: "Einstellungen", action: standardAction, keyEquivalent: ",")
+        applicationMenu.addItem(NSMenuItem.separator())
+        let services = NSMenuItem(title: "Dienste", action: standardAction, keyEquivalent: "")
+        services.submenu = applicationMenuServices
+        applicationMenu.addItem(services)
+        applicationMenu.addItem(NSMenuItem.separator())
+        applicationMenu.addItem(withTitle: "ADB Connector ausblenden", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        let hideOthers = NSMenuItem(title: "Andere ausblenden", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
+        hideOthers.keyEquivalentModifierMask = [.command, .option]
+        applicationMenu.addItem(hideOthers)
+        applicationMenu.addItem(withTitle: "Alle einblenden", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
+         applicationMenu.addItem(NSMenuItem.separator())
+        applicationMenu.addItem(withTitle: "ADB Connector beenden", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        NSApp.mainMenu = menubar
+        
         deviceName = setDeviceName()
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
+    }
+    
+    /// Nur zum Aufbau des GUIs.
+    @objc func menuChoosen() {
+        print("Menü betätigt!")
     }
     
     /// Befragt den Nutzer nach dem Namen seines Androidgeräts. Was der Nutzer eingegeben hat, wird zurückgegeben.
@@ -246,17 +282,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
+    /// Befragt den Nutzer nach der IP-Adresse seines Geräts.
+    ///
+    /// - Parameter userInfo: Falls dem Nutzer noch etwas zusätzlich mitgeteilt werden soll.
+    /// - Returns: Die vom Nutzer eingegebene IP-Adresse.
+    private func setIPAddress(userInfo: String?) -> String {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = "Bitte die IP-Adresse von \(deviceName ?? "ihrem Gerät") eingeben:"
+        alert.informativeText = "Dies ist die IP-Adresse ihres Geräts, zu finden in den Netzwerkeinstellungen auf dem Gerät. \(userInfo ?? "")"
+        let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
+        alert.accessoryView = textField
+        //alert.beginSheetModal(for: window, completionHandler: nil)
+        alert.runModal()
+        return textField.stringValue
+    }
+    
     /// Versucht sich per (W)LAN mit dem Androidgerät zu verbinden. Sollte die IP-Addresse falsch sein,
     /// wird sie vom Nutzer erfragt oder das Programm beendet.
     ///
     /// - Returns: Ob das Androidgerät erolgreich verbunden wurde.
     private func connectWLAN() -> Bool {
+        if ipAddress == nil {
+            ipAddress = setIPAddress(userInfo: nil)
+        }
         inform("WLAN-Verbindung mit \(deviceName!) wird aufgebaut...", .no_flag)
         let ioText = execADB("connect", ipAddress!)
         if ioText.contains("unable") && ioText.contains("connect") {
             timer.invalidate()
             inform("Falsche IP-Addresse", .error)
-            // TODO IP-Adresse erfragen oder beenden
+            ipAddress = setIPAddress(userInfo: "Falsche IP-Adresse!")
             timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectWLAN), userInfo: nil, repeats: true)
             return false
         }
@@ -286,7 +341,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Leitet den Befehl des Springenknopfes an [mainAction(action:)](x-source-tag://mainAction(action:)) weiter.
     @objc func skip() {
-        
+        if lastAction == Action.connectUSB || lastAction == Action.disconnectUSB {
+            timer.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectWLAN), userInfo: nil, repeats: true)
+            skipButton?.isEnabled = false
+        }
     }
     
     /// Leitet den Befehl des Abbrechenknopfes an [mainAction(action:)](x-source-tag://mainAction(action:)) weiter.
