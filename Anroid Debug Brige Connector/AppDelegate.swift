@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let s = NSScreen.main?.frame
-        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, /*s?.height ?? */500, 685, 60), styleMask: NSWindow.StyleMask(rawValue: 0), backing: NSWindow.BackingStoreType.buffered, defer: true)
+        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, (s?.height ?? 500) - 1, 685, 60), styleMask: NSWindow.StyleMask(rawValue: 0), backing: NSWindow.BackingStoreType.buffered, defer: true)
         window.title = "ADB Connector"
         label = NSTextField(frame: NSMakeRect(0, 0, 680, 20))
         label.isBezeled = false
@@ -75,12 +75,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         hideOthers.keyEquivalentModifierMask = [.command, .option]
         applicationMenu.addItem(hideOthers)
         applicationMenu.addItem(withTitle: "Alle einblenden", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
-         applicationMenu.addItem(NSMenuItem.separator())
+        applicationMenu.addItem(NSMenuItem.separator())
         applicationMenu.addItem(withTitle: "ADB Connector beenden", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        
+        let deviceMenuBar = NSMenuItem(title: "Gerät", action: nil, keyEquivalent: "")
+        menubar.addItem(deviceMenuBar)
+        let deviceMenu = NSMenu(title: "Gerät")
+        deviceMenuBar.submenu = deviceMenu
+        deviceMenu.addItem(withTitle: "IP-Adresse eingeben...", action: #selector(menuSetIPAddress), keyEquivalent: "")
+        deviceMenu.addItem(withTitle: "Name eingeben...", action: #selector(menuSetDeviceName), keyEquivalent: "")
         NSApp.mainMenu = menubar
         
         deviceName = setDeviceName()
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
+        if canStart() {
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
+        }
+    }
+    
+    /// Gibt zurück, ob sich dieses Programm mit einem Androidgerät verbinden kann oder nicht.
+    ///
+    /// - Returns: Ob alle Einstellungen, die nötig sind, eingestellt sind.
+    private func canStart() -> Bool {
+        return deviceName != nil && deviceName != nil
+    }
+    
+    /// Stellt den Namen des Geräts ein. Wird vom Nutzer ausgelöst.
+    @objc func menuSetDeviceName() {
+        deviceName = setDeviceName(cancellable: true) ?? deviceName
+    }
+    
+    /// Stellt die IP-Addresse des Androidgeräts ein. Wird vom Nutzer ausgelöst.
+    @objc func menuSetIPAddress() {
+        ipAddress = setIPAddress(userInfo: nil, cancellable: true) ?? ipAddress
     }
     
     /// Nur zum Aufbau des GUIs.
@@ -88,18 +114,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         print("Menü betätigt!")
     }
     
-    /// Befragt den Nutzer nach dem Namen seines Androidgeräts. Was der Nutzer eingegeben hat, wird zurückgegeben.
+    /// Befragt den Nutzer nach dem Namen seines Androidgeräts. Sollte der Nutzer den Dialog abbrechen,
+    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden.
     ///
-    /// - Returns: Den vom Nutzer eingegebenen Gerätenamen.
-    func setDeviceName() -> String {
+    /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig false).
+    /// - Returns: Den vom Nutzer eingegebenen Gerätenamen oder nil bei Abbruch.
+    func setDeviceName(cancellable: Bool = false) -> String? {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.messageText = "Bitte den Gerätenamen eingeben:"
         alert.informativeText = "Dies ist der Name des Geräts, wenn es per USB verbunden wird."
         let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
         alert.accessoryView = textField
+        alert.addButton(withTitle: "OK")
+        if cancellable {
+            alert.addButton(withTitle: "Cancel")
+        }
         //alert.beginSheetModal(for: window, completionHandler: nil)
-        alert.runModal()
+        if alert.runModal() == .alertSecondButtonReturn {
+            return nil
+        }
         return textField.stringValue
     }
 
@@ -160,6 +194,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
             }*/
+            lastAction = .connectUSB
             timerOpenLANPort()
         }
         lastAction = .connectUSB
@@ -187,6 +222,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
             }*/
+            lastAction = .openLANPort
             timerSuperDisconnectUSB()
         } else {
             if let la = lastAction {
@@ -214,6 +250,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(blinkGreen), userInfo: nil, repeats: true)
                 }
             }*/
+            lastAction = .disconnectUSB
             timerConnectWLAN()
         } else {
             if let la = lastAction {
@@ -282,19 +319,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
-    /// Befragt den Nutzer nach der IP-Adresse seines Geräts.
+    /// Befragt den Nutzer nach der IP-Adresse seines Geräts. Sollte der Nutzer den Dialog abbrechen,
+    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden.
     ///
     /// - Parameter userInfo: Falls dem Nutzer noch etwas zusätzlich mitgeteilt werden soll.
-    /// - Returns: Die vom Nutzer eingegebene IP-Adresse.
-    private func setIPAddress(userInfo: String?) -> String {
+    /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig false).
+    /// - Returns: Die vom Nutzer eingegebene IP-Adresse oder nil bei Abbruch.
+    private func setIPAddress(userInfo: String?, cancellable: Bool = false) -> String? {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.messageText = "Bitte die IP-Adresse von \(deviceName ?? "ihrem Gerät") eingeben:"
         alert.informativeText = "Dies ist die IP-Adresse ihres Geräts, zu finden in den Netzwerkeinstellungen auf dem Gerät. \(userInfo ?? "")"
         let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
         alert.accessoryView = textField
+        alert.addButton(withTitle: "OK")
+        if cancellable {
+            alert.addButton(withTitle: "Cancel")
+        }
         //alert.beginSheetModal(for: window, completionHandler: nil)
-        alert.runModal()
+        if alert.runModal() == .alertSecondButtonReturn {
+            return nil
+        }
         return textField.stringValue
     }
     
@@ -307,7 +352,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             ipAddress = setIPAddress(userInfo: nil)
         }
         inform("WLAN-Verbindung mit \(deviceName!) wird aufgebaut...", .no_flag)
-        let ioText = execADB("connect", ipAddress!)
+        let ioText = execADB("connect", "\(ipAddress!):\(lanPort)")
         if ioText.contains("unable") && ioText.contains("connect") {
             timer.invalidate()
             inform("Falsche IP-Addresse", .error)
