@@ -28,9 +28,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Der Knopf zum direkten Verbinden über (W)LAN.
     var skipButton: NSButton?
     /// Der LAN-Port, der zur (W)LAN-Verbindung auf dem Androidgerät geöffnet werden soll.
-    let lanPort = 5555
+    var lanPort = 5555
     /// Die zuletzt durchgeführte Aktion.
     var lastAction: Action? = nil
+    var first: Bool = true
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let s = NSScreen.main?.frame
@@ -66,7 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         applicationMenu.addItem(NSMenuItem.separator())
         applicationMenu.addItem(withTitle: "Einstellungen", action: standardAction, keyEquivalent: ",")
         applicationMenu.addItem(NSMenuItem.separator())
-        let services = NSMenuItem(title: "Dienste", action: standardAction, keyEquivalent: "")
+        let services = NSMenuItem(title: "Dienste", action: nil, keyEquivalent: "")
         services.submenu = applicationMenuServices
         applicationMenu.addItem(services)
         applicationMenu.addItem(NSMenuItem.separator())
@@ -84,11 +85,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         deviceMenuBar.submenu = deviceMenu
         deviceMenu.addItem(withTitle: "IP-Adresse eingeben...", action: #selector(menuSetIPAddress), keyEquivalent: "")
         deviceMenu.addItem(withTitle: "Name eingeben...", action: #selector(menuSetDeviceName), keyEquivalent: "")
+        deviceMenu.addItem(withTitle: "Port ändern...", action: #selector(changePort), keyEquivalent: "")
         NSApp.mainMenu = menubar
         
         deviceName = setDeviceName()
         if canStart() {
             timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
+        }
+    }
+    
+    @objc func changePort() {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = "Bitte den zu verwendenen TCP/IP-Port eingeben:"
+        alert.informativeText = "Dieser Port wird verwendet, um das Androidgerät darüber zu verbinden."
+        let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
+        alert.accessoryView = textField
+        textField.stringValue = "\(lanPort)"
+        textField.selectText(self)
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        if alert.runModal() == .alertFirstButtonReturn {
+            lanPort = Int(textField.stringValue) ?? lanPort
         }
     }
     
@@ -163,8 +181,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func superDisconnectUSB() -> Bool {
-        // Keine Ahnung, was da in Java noch nötig war...
-        return disconnectUSB()
+        if first {
+            if connectUSB() {
+                first = false
+            }
+            return false
+        } else {
+            return disconnectUSB()
+        }
     }
     
     /// Versucht sich vollständig mit dem Androidgerät zu verbinden. Sollte es an irgendeiner Stelle
@@ -353,7 +377,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         inform("WLAN-Verbindung mit \(deviceName!) wird aufgebaut...", .no_flag)
         let ioText = execADB("connect", "\(ipAddress!):\(lanPort)")
-        if ioText.contains("unable") && ioText.contains("connect") {
+        if /*ioText.contains("unable") && ioText.contains("connect")*/ioText.contains("missing port") {
             timer.invalidate()
             inform("Falsche IP-Addresse", .error)
             ipAddress = setIPAddress(userInfo: "Falsche IP-Adresse!")
@@ -427,7 +451,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         p.arguments = command
         let pipe = Pipe()
         p.standardOutput = pipe
+        p.standardError = pipe
         p.launch()
+        // TODO Unbedingt korrigieren, friert hier ein wenn IP-Adresse falsch ist!
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         p.waitUntilExit()
         return String(data: data, encoding: String.Encoding.utf8) ?? "missing value"
