@@ -31,6 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var lanPort = 5555
     /// Die zuletzt durchgeführte Aktion.
     var lastAction: Action? = nil
+    /// Ein Wahrheitswert, mit dem ein Bremse bei der Trennung der USB-Verbindung realisiert wird.
     var first: Bool = true
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -94,6 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    /// Zeigt einen Dialog, in dem der Nutzer den zu verwendenden Port ändern kann.
     @objc func changePort() {
         let alert = NSAlert()
         alert.alertStyle = .informational
@@ -105,6 +107,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         textField.selectText(self)
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
+        alert.window.initialFirstResponder = textField
         if alert.runModal() == .alertFirstButtonReturn {
             lanPort = Int(textField.stringValue) ?? lanPort
         }
@@ -133,7 +136,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     /// Befragt den Nutzer nach dem Namen seines Androidgeräts. Sollte der Nutzer den Dialog abbrechen,
-    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden.
+    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden. Sollte der
+    /// Gerätename bereits gesetzt worden sein, wird er zur Bearbeitung angezeigt.
     ///
     /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig false).
     /// - Returns: Den vom Nutzer eingegebenen Gerätenamen oder nil bei Abbruch.
@@ -143,12 +147,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.messageText = "Bitte den Gerätenamen eingeben:"
         alert.informativeText = "Dies ist der Name des Geräts, wenn es per USB verbunden wird."
         let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
+        if let dn = deviceName {
+            textField.stringValue = dn
+        }
         alert.accessoryView = textField
         alert.addButton(withTitle: "OK")
         if cancellable {
             alert.addButton(withTitle: "Cancel")
         }
-        //alert.beginSheetModal(for: window, completionHandler: nil)
+        alert.window.initialFirstResponder = textField
         if alert.runModal() == .alertSecondButtonReturn {
             return nil
         }
@@ -344,7 +351,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     /// Befragt den Nutzer nach der IP-Adresse seines Geräts. Sollte der Nutzer den Dialog abbrechen,
-    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden.
+    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden. Sollte die
+    /// IP-Addresse bereits gesetzt worden sein, wird sie zur Bearbeitung angezeigt.
     ///
     /// - Parameter userInfo: Falls dem Nutzer noch etwas zusätzlich mitgeteilt werden soll.
     /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig false).
@@ -356,11 +364,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.informativeText = "Dies ist die IP-Adresse ihres Geräts, zu finden in den Netzwerkeinstellungen auf dem Gerät. \(userInfo ?? "")"
         let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
         alert.accessoryView = textField
+        if let ia = ipAddress {
+            textField.stringValue = ia
+        }
         alert.addButton(withTitle: "OK")
         if cancellable {
             alert.addButton(withTitle: "Cancel")
         }
-        //alert.beginSheetModal(for: window, completionHandler: nil)
+        alert.window.initialFirstResponder = textField
         if alert.runModal() == .alertSecondButtonReturn {
             return nil
         }
