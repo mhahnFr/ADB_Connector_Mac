@@ -14,6 +14,9 @@
 		BF1180F722C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1180F622C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorTests.swift */; };
 		BF11810222C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11810122C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift */; };
 		BF11811022C0BA8E00D3353C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11810F22C0BA8E00D3353C /* main.swift */; };
+		BF207300231FA78100416162 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2072FF231FA78100416162 /* Settings.swift */; };
+		BF207302231FAB9800416162 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF207301231FAB9800416162 /* Device.swift */; };
+		BF2CF4C7231D28E2005455D9 /* SettingsWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2CF4C6231D28E2005455D9 /* SettingsWindowDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		BF11810122C0BA4400D3353C /* Anroid_Debug_Brige_ConnectorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anroid_Debug_Brige_ConnectorUITests.swift; sourceTree = "<group>"; };
 		BF11810322C0BA4400D3353C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF11810F22C0BA8E00D3353C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		BF2072FF231FA78100416162 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		BF207301231FAB9800416162 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		BF2CF4C6231D28E2005455D9 /* SettingsWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +106,10 @@
 			isa = PBXGroup;
 			children = (
 				BF0EEDDE22DF2288007A3714 /* Anroid Debug Brige Connector.entitlements */,
+				BF2CF4C6231D28E2005455D9 /* SettingsWindowDelegate.swift */,
 				BF1180E322C0BA4300D3353C /* AppDelegate.swift */,
+				BF207301231FAB9800416162 /* Device.swift */,
+				BF2072FF231FA78100416162 /* Settings.swift */,
 				BF0BC09422C2248600909D03 /* Action.swift */,
 				BF07D73322C4B6AE000D2461 /* Mode.swift */,
 				BF11810F22C0BA8E00D3353C /* main.swift */,
@@ -263,9 +272,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF207300231FA78100416162 /* Settings.swift in Sources */,
 				BF1180E422C0BA4300D3353C /* AppDelegate.swift in Sources */,
 				BF0BC09522C2248600909D03 /* Action.swift in Sources */,
+				BF2CF4C7231D28E2005455D9 /* SettingsWindowDelegate.swift in Sources */,
 				BF07D73422C4B6AE000D2461 /* Mode.swift in Sources */,
+				BF207302231FAB9800416162 /* Device.swift in Sources */,
 				BF11811022C0BA8E00D3353C /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
