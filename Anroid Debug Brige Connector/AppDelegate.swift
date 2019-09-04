@@ -11,6 +11,8 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     /// Das Hauptfenster.
     var window: NSWindow!
+    /// Das Fenster für die Einstellungen.
+    var settingsWindow: NSWindow?
     /// Der Pfad zur Android Debug Bridge (adb).
     let pathToADB = "~/Library/Android/sdk/platform-tools/adb"
     /// Das Label mit dem Text für den Nutzer.
@@ -31,17 +33,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var lanPort = 5555
     /// Die zuletzt durchgeführte Aktion.
     var lastAction: Action? = nil
-    /// Ein Wahrheitswert, mit dem ein Bremse bei der Trennung der USB-Verbindung realisiert wird.
+    /// Ein Wahrheitswert, mit dem ein Bremse bei der Trennung der USB-Verbindung realisiert
+    /// wird.
     var first: Bool = true
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let s = NSScreen.main?.frame
         window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, (s?.height ?? 500) - 1, 685, 60), styleMask: NSWindow.StyleMask(rawValue: 0), backing: NSWindow.BackingStoreType.buffered, defer: true)
         window.title = "ADB Connector"
-        label = NSTextField(frame: NSMakeRect(0, 0, 680, 20))
-        label.isBezeled = false
-        label.isEditable = false
-        label.stringValue = "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen."
+        label = NSTextField(labelWithString: "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen.")
+        label.drawsBackground = true
+        label.backgroundColor = NSColor.clear
         label.sizeToFit()
         let abortButton = NSButton(title: "Abbrechen", target: nil, action: #selector(abort))
         skipButton = NSButton(title: ">>", target: self, action: #selector(skip))
@@ -66,7 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.servicesMenu = applicationMenuServices
         applicationMenu.addItem(withTitle: "Über ADB Connector", action: standardAction, keyEquivalent: "")
         applicationMenu.addItem(NSMenuItem.separator())
-        applicationMenu.addItem(withTitle: "Einstellungen", action: standardAction, keyEquivalent: ",")
+        applicationMenu.addItem(withTitle: "Einstellungen", action: #selector(showSettings), keyEquivalent: ",")
         applicationMenu.addItem(NSMenuItem.separator())
         let services = NSMenuItem(title: "Dienste", action: nil, keyEquivalent: "")
         services.submenu = applicationMenuServices
@@ -93,6 +95,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if canStart() {
             timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
         }
+    }
+    
+    @objc func showSettings() {
+        if settingsWindow == nil {
+            settingsWindow = createSettingsDialog()
+        }
+        NSApp.runModal(for: settingsWindow!)
     }
     
     /// Zeigt einen Dialog, in dem der Nutzer den zu verwendenden Port ändern kann.
@@ -187,6 +196,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
     
+    /// Diese Funktion soll die Trennung der USB-Verbindung abbremsen.
     private func superDisconnectUSB() -> Bool {
         if first {
             if connectUSB() {
@@ -266,6 +276,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         lastAction = .openLANPort
     }
     
+    /// Versucht, die USB-Verbindung zum Androidgerät zu trennen. Sollte sie noch nicht
+    /// getrennt worden sein, wird ein Timer gestartet, wodurch auf die Verbindungstrennung
+    /// gewartet werden kann.
     @objc func timerSuperDisconnectUSB() {
         if superDisconnectUSB() {
             /*if !connectWLAN() {
@@ -294,6 +307,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         lastAction = .disconnectUSB
     }
     
+    /// Versucht, sich per (W)LAN mit em Androidgerät zu verbinden. Sollte es nicht funktionieren,
+    /// wird ein Timer gestartet, der es immer wieder versucht. Sollte die Verbindung zustande
+    /// gekommen sein, wird ein anderer Timer gestartet, der das Informationstextfeld grün blinken
+    /// lässt.
     @objc func timerConnectWLAN() {
         if connectWLAN() {
             timer.invalidate()
@@ -307,6 +324,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    /// Überprüft, ob das Androidgerät über (W)LAN verbunden ist und startet das Erfolgsblinken,
+    /// sollte die Verbindung stehen.
     @objc func timerCheckWLANConnection() {
         if checkWLANConnection() {
             inform("Verbunden.", .success)
@@ -316,6 +335,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    /// Lässt das Textfeld grün blinken und überprüft gleichzeitig die Verbindung mit dem
+    /// Androidgerät.
     @objc func blinkGreen() {
         if greenCounter < 10 {
             if !checkWLANConnection() {
@@ -494,5 +515,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             label.backgroundColor = NSColor.clear
             label.textColor = NSColor.black
         }
+    }
+
+    /// Erzeugt ein Fenster, in welchem die Einstellungen aufgelistet werden. Das
+    /// erzeugte Fenster muss mit NSApplication:runModal(forWindow:) angezeigt werden!
+    ///
+    /// - Returns: Das gerade erzeugte Fenster mit den Einstellungen.
+    private func createSettingsDialog() -> NSWindow {
+        let toReturn = NSWindow(contentRect: NSMakeRect(/*window.frame.origin.x + (window.frame.width / 2), window.frame.origin.y + (window.frame.height / 2)*/0, 0, 200, 75), styleMask: NSWindow.StyleMask(rawValue: NSWindow.StyleMask.closable.rawValue | NSWindow.StyleMask.titled.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
+        toReturn.title = "Einstellungen"
+        let ipLabel = NSTextField(labelWithString: "Die IP-Adresse des Androidgeräts:")
+        let nameLabel = NSTextField(labelWithString: "Der Name des Androidgeräts:")
+        let portLabel = NSTextField(labelWithString: "Der für die Verbindung zu verwendende Port:")
+        let ipField = NSTextField(string: ipAddress ?? "")
+        ipField.placeholderString = "192.168.1.1 oder Mein-Gerät.local"
+        let nameField = NSTextField(string: deviceName ?? "")
+        nameField.placeholderString = "Gerätemodell oder Name"
+        let portField = NSTextField(string: "\(lanPort)")
+        portField.placeholderString = "Eine Nummer, z. B. 5555"
+        let gridView = NSStackView(views: [nameLabel, nameField, ipLabel, ipField, portLabel, portField])
+        gridView.orientation = .vertical
+        toReturn.contentView = gridView
+        let swd = SettingsWindowDelegate()
+        toReturn.delegate = swd
+        return toReturn
     }
 }
