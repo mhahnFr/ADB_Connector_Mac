@@ -9,7 +9,8 @@
 /// Diese Klasse kümmert sich um alle Einstellungen, die von der App gespeichert werden
 /// müssen.
 class Settings {
-    var deviceName: String = "Your device"
-    var deviceIPAddress: String = "192.168.1.1"
-    var lanPort: Int = 5555
+    /// Der Port, der standardmäßig zur Verbindung über (W)LAN verwendet wird.
+    var standardLANPort = 5555
+    /// Die Liste mit den Geräten.
+    var devices: [Device] = []
 }

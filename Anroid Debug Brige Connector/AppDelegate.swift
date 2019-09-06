@@ -36,6 +36,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Ein Wahrheitswert, mit dem ein Bremse bei der Trennung der USB-Verbindung realisiert
     /// wird.
     var first: Bool = true
+    /// Die zentralen Einstellungen dieses Programms.
+    let settings = Settings()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let s = NSScreen.main?.frame
@@ -97,6 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    /// Zeigt das Fenster für die Einstellungen an. Dieses wird bei Bedarf erzeugt.
     @objc func showSettings() {
         if settingsWindow == nil {
             settingsWindow = createSettingsDialog()
@@ -126,7 +129,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///
     /// - Returns: Ob alle Einstellungen, die nötig sind, eingestellt sind.
     private func canStart() -> Bool {
-        return deviceName != nil && deviceName != nil
+        //return deviceName != nil && deviceName != nil
+        return !settings.devices.isEmpty
     }
     
     /// Stellt den Namen des Geräts ein. Wird vom Nutzer ausgelöst.
@@ -144,11 +148,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         print("Menü betätigt!")
     }
     
-    /// Befragt den Nutzer nach dem Namen seines Androidgeräts. Sollte der Nutzer den Dialog abbrechen,
-    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden. Sollte der
-    /// Gerätename bereits gesetzt worden sein, wird er zur Bearbeitung angezeigt.
+    /// Befragt den Nutzer nach dem Namen seines Androidgeräts. Sollte der Nutzer den Dialog
+    /// abbrechen, wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen
+    /// werden. Sollte der Gerätename bereits gesetzt worden sein, wird er zur Bearbeitung
+    /// angezeigt.
     ///
-    /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig false).
+    /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig
+    /// false).
     /// - Returns: Den vom Nutzer eingegebenen Gerätenamen oder nil bei Abbruch.
     func setDeviceName(cancellable: Bool = false) -> String? {
         let alert = NSAlert()
@@ -208,8 +214,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    /// Versucht sich vollständig mit dem Androidgerät zu verbinden. Sollte es an irgendeiner Stelle
-    /// später noch einmal versucht werden müssen, wird ein entsprechender Timer gestartet.
+    /// Versucht sich vollständig mit dem Androidgerät zu verbinden. Sollte es an irgendeiner
+    /// Stelle später noch einmal versucht werden müssen, wird ein entsprechender Timer
+    /// gestartet.
     @objc func timerConnectUSB() {
         if connectUSB() {
             /*if !openLANPort() {
@@ -241,8 +248,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         lastAction = .connectUSB
     }
     
-    /// Versucht sich mit dem Androidgerät zu verbinden ab dem unkt des Port Öffnens. Sollte es an irgendeiner Stelle
-    /// später noch einmal versucht werden müssen, wird ein entsprechender Timer gestartet.
+    /// Versucht sich mit dem Androidgerät zu verbinden ab dem unkt des Port Öffnens. Sollte
+    /// es an irgendeiner Stelle später noch einmal versucht werden müssen, wird ein
+    /// entsprechender Timer gestartet.
     @objc func timerOpenLANPort() {
         if openLANPort() {
             /*if !superDisconnectUSB() {
@@ -307,10 +315,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         lastAction = .disconnectUSB
     }
     
-    /// Versucht, sich per (W)LAN mit em Androidgerät zu verbinden. Sollte es nicht funktionieren,
-    /// wird ein Timer gestartet, der es immer wieder versucht. Sollte die Verbindung zustande
-    /// gekommen sein, wird ein anderer Timer gestartet, der das Informationstextfeld grün blinken
-    /// lässt.
+    /// Versucht, sich per (W)LAN mit em Androidgerät zu verbinden. Sollte es nicht
+    /// funktionieren, wird ein Timer gestartet, der es immer wieder versucht. Sollte die
+    /// Verbindung zustande gekommen sein, wird ein anderer Timer gestartet, der das
+    /// Informationstextfeld grün blinken lässt.
     @objc func timerConnectWLAN() {
         if connectWLAN() {
             timer.invalidate()
@@ -324,8 +332,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    /// Überprüft, ob das Androidgerät über (W)LAN verbunden ist und startet das Erfolgsblinken,
-    /// sollte die Verbindung stehen.
+    /// Überprüft, ob das Androidgerät über (W)LAN verbunden ist und startet das
+    /// Erfolgsblinken, sollte die Verbindung stehen.
     @objc func timerCheckWLANConnection() {
         if checkWLANConnection() {
             inform("Verbunden.", .success)
@@ -371,12 +379,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
-    /// Befragt den Nutzer nach der IP-Adresse seines Geräts. Sollte der Nutzer den Dialog abbrechen,
-    /// wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen werden. Sollte die
-    /// IP-Addresse bereits gesetzt worden sein, wird sie zur Bearbeitung angezeigt.
+    /// Befragt den Nutzer nach der IP-Adresse seines Geräts. Sollte der Nutzer den Dialog
+    /// abbrechen, wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen
+    /// werden. Sollte die IP-Addresse bereits gesetzt worden sein, wird sie zur Bearbeitung
+    /// angezeigt.
     ///
     /// - Parameter userInfo: Falls dem Nutzer noch etwas zusätzlich mitgeteilt werden soll.
-    /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig false).
+    /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig
+    /// false).
     /// - Returns: Die vom Nutzer eingegebene IP-Adresse oder nil bei Abbruch.
     private func setIPAddress(userInfo: String?, cancellable: Bool = false) -> String? {
         let alert = NSAlert()
@@ -399,8 +409,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return textField.stringValue
     }
     
-    /// Versucht sich per (W)LAN mit dem Androidgerät zu verbinden. Sollte die IP-Addresse falsch sein,
-    /// wird sie vom Nutzer erfragt oder das Programm beendet.
+    /// Versucht sich per (W)LAN mit dem Androidgerät zu verbinden. Sollte die IP-Addresse
+    /// falsch sein, wird sie vom Nutzer erfragt oder das Programm beendet.
     ///
     /// - Returns: Ob das Androidgerät erolgreich verbunden wurde.
     private func connectWLAN() -> Bool {
@@ -423,7 +433,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
-    /// Versucht, den LAN-Port auf dem Androidgerät zu öffnen, so dass es sich per (W)LAN verbinden kann.
+    /// Versucht, den LAN-Port auf dem Androidgerät zu öffnen, so dass es sich per (W)LAN
+    /// verbinden kann.
     ///
     /// - Returns: Ob der Port erfolgreich geöffnet wurde
     private func openLANPort() -> Bool {
@@ -440,7 +451,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
-    /// Leitet den Befehl des Springenknopfes an [mainAction(action:)](x-source-tag://mainAction(action:)) weiter.
+    /// Sorgt dafür, dass sich die ADB sofort mit dem bereits eingestellten Androidgerät
+    /// verbindet.
     @objc func skip() {
         if lastAction == Action.connectUSB || lastAction == Action.disconnectUSB {
             timer.invalidate()
@@ -449,7 +461,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    /// Leitet den Befehl des Abbrechenknopfes an [mainAction(action:)](x-source-tag://mainAction(action:)) weiter.
+    /// Beendet das Programm schlicht.
     @objc func abort() {
         NSApp.terminate(self)
     }
@@ -517,8 +529,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    /// Erzeugt ein Fenster, in welchem die Einstellungen aufgelistet werden. Das
-    /// erzeugte Fenster muss mit NSApplication:runModal(forWindow:) angezeigt werden!
+    /// Erzeugt ein Fenster, in welchem die Einstellungen aufgelistet werden. Das erzeugte
+    /// Fenster muss mit NSApplication:runModal(forWindow:) angezeigt werden!
     ///
     /// - Returns: Das gerade erzeugte Fenster mit den Einstellungen.
     private func createSettingsDialog() -> NSWindow {
