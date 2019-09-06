@@ -16,6 +16,9 @@ class Device {
     var openedPort = false
     /// Wie und ob dieses Gerät mit der ADB verbunden ist.
     var connectionType: ConnectionType?
+    /// Der zu verwendende Port für dieses Gerät. Sollte kein Port gsetzt sein, muss der
+    /// Standardport verwendet werden.
+    var lanPort: Int?
     
     /// Initialisiert die Repräsentation.
     ///
