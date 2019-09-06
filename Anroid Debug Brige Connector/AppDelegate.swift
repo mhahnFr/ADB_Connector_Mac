@@ -38,12 +38,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var first: Bool = true
     /// Die zentralen Einstellungen dieses Programms.
     let settings = Settings()
+    let devicesList = NSStackView(views: [])
+    let nameField = NSTextField()
+    let ipField = NSTextField()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let s = NSScreen.main?.frame
-        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, (s?.height ?? 500) - 1, 685, 60), styleMask: NSWindow.StyleMask(rawValue: 0), backing: NSWindow.BackingStoreType.buffered, defer: true)
+        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, (s?.height ?? 500) - 1, 685, 60), styleMask: NSWindow.StyleMask(rawValue: NSWindow.StyleMask.closable.rawValue | NSWindow.StyleMask.titled.rawValue | NSWindow.StyleMask.resizable.rawValue | NSWindow.StyleMask.miniaturizable.rawValue | NSWindow.StyleMask.fullSizeContentView.rawValue | NSWindow.StyleMask.fullScreen.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
         window.title = "ADB Connector"
-        label = NSTextField(labelWithString: "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen.")
+        devicesList.orientation = .horizontal
+        devicesList.addArrangedSubview(NSButton(title: "Gerät hinzufügen...", target: self, action: <#Selector?#>))
+        let nameLabel = NSTextField(labelWithString: "Gerätename:")
+        let ipLabel = NSTextField(labelWithString: "IP-Adresse:")
+        let useDefaultPort = NSButton(radioButtonWithTitle: "Standardport verwenden", target: <#T##Any?#>, action: <#T##Selector?#>)
+        let devicesPane = NSStackView(views: <#T##[NSView]#>)
+        /*label = NSTextField(labelWithString: "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen.")
         label.drawsBackground = true
         label.backgroundColor = NSColor.clear
         label.sizeToFit()
@@ -53,7 +62,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         gridButtons.orientation = .horizontal
         let mainGrid = NSStackView(views: [label, gridButtons])
         mainGrid.orientation = .vertical
-        window.contentView = mainGrid
+        window.contentView = mainGrid*/
+        
         window.makeKeyAndOrderFront(self)
         
         // NUR ZUM AUFBAUEN!
