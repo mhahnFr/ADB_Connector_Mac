@@ -44,14 +44,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let s = NSScreen.main?.frame
-        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, (s?.height ?? 500) - 1, 685, 60), styleMask: NSWindow.StyleMask(rawValue: NSWindow.StyleMask.closable.rawValue | NSWindow.StyleMask.titled.rawValue | NSWindow.StyleMask.resizable.rawValue | NSWindow.StyleMask.miniaturizable.rawValue | NSWindow.StyleMask.fullSizeContentView.rawValue | NSWindow.StyleMask.fullScreen.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
+        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, (s?.height ?? 500) - 1, 685, 60), styleMask: NSWindow.StyleMask(rawValue: NSWindow.StyleMask.closable.rawValue | NSWindow.StyleMask.titled.rawValue | NSWindow.StyleMask.resizable.rawValue | NSWindow.StyleMask.miniaturizable.rawValue | NSWindow.StyleMask.fullSizeContentView.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
         window.title = "ADB Connector"
-        devicesList.orientation = .horizontal
-        devicesList.addArrangedSubview(NSButton(title: "Gerät hinzufügen...", target: self, action: <#Selector?#>))
+        devicesList.orientation = .vertical
+        devicesList.addArrangedSubview(NSButton(title: "Gerät hinzufügen...", target: self, action: #selector(addDevice)))
         let nameLabel = NSTextField(labelWithString: "Gerätename:")
         let ipLabel = NSTextField(labelWithString: "IP-Adresse:")
-        let useDefaultPort = NSButton(radioButtonWithTitle: "Standardport verwenden", target: <#T##Any?#>, action: <#T##Selector?#>)
-        let devicesPane = NSStackView(views: <#T##[NSView]#>)
+        let useDefaultPort = NSButton(checkboxWithTitle: "Standardport verwenden", target: self, action: nil)
+        let devicesPane = NSStackView(views: [nameLabel, nameField, ipLabel, ipField, useDefaultPort])
+        devicesPane.orientation = .vertical
+        let mainView = NSStackView(views: [devicesList, devicesPane])
+        mainView.orientation = .horizontal
+        window.contentView = mainView
         /*label = NSTextField(labelWithString: "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen.")
         label.drawsBackground = true
         label.backgroundColor = NSColor.clear
@@ -66,6 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         window.makeKeyAndOrderFront(self)
         
+        // MARK: Menüzeile
         // NUR ZUM AUFBAUEN!
         let standardAction = #selector(menuChoosen)
         // Das erste NSMenu ist die Menüzeile
@@ -98,14 +103,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menubar.addItem(deviceMenuBar)
         let deviceMenu = NSMenu(title: "Gerät")
         deviceMenuBar.submenu = deviceMenu
-        deviceMenu.addItem(withTitle: "IP-Adresse eingeben...", action: #selector(menuSetIPAddress), keyEquivalent: "")
-        deviceMenu.addItem(withTitle: "Name eingeben...", action: #selector(menuSetDeviceName), keyEquivalent: "")
-        deviceMenu.addItem(withTitle: "Port ändern...", action: #selector(changePort), keyEquivalent: "")
+        //deviceMenu.addItem(withTitle: "IP-Adresse eingeben...", action: #selector(menuSetIPAddress), keyEquivalent: "")
+        //deviceMenu.addItem(withTitle: "Name eingeben...", action: #selector(menuSetDeviceName), keyEquivalent: "")
+        //deviceMenu.addItem(withTitle: "Port ändern...", action: #selector(changePort), keyEquivalent: "")
+        deviceMenu.addItem(withTitle: "Hinzufügen...", action: #selector(addDevice), keyEquivalent: "n")
         NSApp.mainMenu = menubar
         
-        deviceName = setDeviceName()
         if canStart() {
             timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
+        } else {
+            addDevice()
+        }
+    }
+    
+    /// Fügt ein Androidgerät der Liste hinzu.
+    @objc func addDevice() {
+        if let name = setDeviceName(cancellable: true) {
+            settings.devices.append(Device(name: name, ipAddress: setIPAddress(userInfo: nil, cancellable: true)))
+            if devicesList.views.count == 1 && (devicesList.views[0] as? NSButton)?.title == "Gerät hinzufügen..." {
+                devicesList.removeView(devicesList.views[0])
+            }
+            let deviceLabel = NSButton(title: name, target: self, action: nil)
+            devicesList.addArrangedSubview(deviceLabel)
         }
     }
     
