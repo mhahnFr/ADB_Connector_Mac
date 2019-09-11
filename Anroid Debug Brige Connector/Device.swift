@@ -6,6 +6,8 @@
 //  Copyright © 2019 Manuel Hahn. All rights reserved.
 //
 
+import Foundation
+
 /// Ein Objekt dieser Klasse repräsentiert ein Androidgerät.
 class Device {
     /// Der Name des Geräts.
@@ -20,12 +22,24 @@ class Device {
     /// Standardport verwendet werden.
     var lanPort: Int?
     
-    /// Initialisiert die Repräsentation.
+    /// Initialisiert die Repräsentation. Sollte der Name ein leerer String sein, wird
+    /// ein Standardname vergeben.
     ///
     /// - Parameter name: Der Name des Geräts.
     /// - Parameter ipAddress: Die IP-Adresse des Geräts, kann auch leer bleiben.
     init(name: String, ipAddress: String?) {
-        deviceName = name
+        if name == "" {
+            let date = Date()
+            let calendar = Calendar.current
+            let hour = calendar.component(.hour, from: date)
+            let minute = calendar.component(.minute, from: date)
+            let day = calendar.component(.day, from: date)
+            let month = calendar.component(.month, from: date)
+            let year = calendar.component(.year, from: date)
+            deviceName = "Device \(day).\(month).\(year) \(hour):\(minute)"
+        } else {
+            deviceName = name
+        }
         self.ipAddress = ipAddress
     }
     
