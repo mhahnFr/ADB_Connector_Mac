@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     /// Das Hauptfenster.
@@ -55,7 +56,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         devicesPane.orientation = .vertical
         let mainView = NSStackView(views: [devicesList, devicesPane])
         mainView.orientation = .horizontal
-        window.contentView = mainView
+        //window.contentView = mainView
+        window.contentView = NSHostingView(rootView: MainView())
         /*label = NSTextField(labelWithString: "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen.")
         label.drawsBackground = true
         label.backgroundColor = NSColor.clear
@@ -123,9 +125,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if devicesList.views.count == 1 && (devicesList.views[0] as? NSButton)?.title == "Gerät hinzufügen..." {
                 devicesList.removeView(devicesList.views[0])
             }
-            let deviceLabel = NSButton(title: name, target: self, action: nil)
+            let deviceLabel = NSButton(title: name, target: self, action: #selector(selectDevice(_:)))
             devicesList.addArrangedSubview(deviceLabel)
         }
+    }
+    
+    @objc func selectDevice(_ device: Device) {
+        print(device)
     }
     
     /// Zeigt das Fenster für die Einstellungen an. Dieses wird bei Bedarf erzeugt.

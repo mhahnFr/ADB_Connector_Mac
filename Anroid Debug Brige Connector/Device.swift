@@ -9,7 +9,7 @@
 import Foundation
 
 /// Ein Objekt dieser Klasse repräsentiert ein Androidgerät.
-class Device {
+@objc class Device: NSObject {
     /// Der Name des Geräts.
     var deviceName: String
     /// Die IP-Adresse des Geräts.
