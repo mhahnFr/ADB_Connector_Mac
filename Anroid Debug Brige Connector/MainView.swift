@@ -9,13 +9,47 @@
 import SwiftUI
 
 struct MainView: View {
+    /// The reference to the settings, which has the list of the devices.
+    @ObservedObject
+    var settings = Settings.shared
+    /// The state of the view, which device has to be shown.
+    @State
+    var selectedDevice = 0
+    /// A reference to the NSApplicationDelegate for convience.
+    let appDelegate = (NSApp.delegate as? AppDelegate)
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            VStack {
+                List(settings.devices) { device in
+                    Button(action: { self.selectedDevice = self.settings.devices.firstIndex(of: device)! }) {
+                        Text(device.deviceName)
+                    }
+                }
+                Button(action: { self.appDelegate?.addDevice() }) {
+                    Text("Hinzufügen...")
+                }
+            }
+            VStack {
+                DeviceView(device: settings.devices[selectedDevice])
+                Button(action: {
+                    if self.appDelegate?.deleteDevice(indexOf: self.selectedDevice) ?? false {
+                        if self.selectedDevice > 0 {
+                            self.selectedDevice -= 1
+                        }
+                    }
+                }) {
+                    Text("Löschen...")
+                }
+            }
+        }
     }
 }
 
+#if DEBUG
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
     }
 }
+#endif

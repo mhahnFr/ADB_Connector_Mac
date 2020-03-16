@@ -12,42 +12,37 @@ import SwiftUI
 class AppDelegate: NSObject, NSApplicationDelegate {
     /// Das Hauptfenster.
     var window: NSWindow!
-    /// Das Fenster für die Einstellungen.
-    var settingsWindow: NSWindow?
+    /*/// Das Fenster für die Einstellungen.
+    var settingsWindow: NSWindow?*/
     /// Der Pfad zur Android Debug Bridge (adb).
     let pathToADB = "~/Library/Android/sdk/platform-tools/adb"
     /// Das Label mit dem Text für den Nutzer.
     var label: NSTextField!
     /// Der Timer, der den Ablauf steuert.
     var timer: Timer!
-    /// Der Gerätename, muss vor Benutzung erst noch initialisiert werden.
-    var deviceName: String?
-    /// Die IP-Addresse des Androidgeräts, muss vor der Benutzung initialisiert werden.
-    var ipAddress: String?
+    /*/// Der Gerätename, muss vor Benutzung erst noch initialisiert werden.
+    var deviceName: String?*/
+    /*/// Die IP-Addresse des Androidgeräts, muss vor der Benutzung initialisiert werden.
+    var ipAddress: String?*/
     /// Ein Wahrheitswert, mit dem das Blinken im GUI ermöglicht wird.
     var blinkON = false
     /// Der Zähler für das Erfolgsblinken.
     var greenCounter = 0
-    /// Der Knopf zum direkten Verbinden über (W)LAN.
-    var skipButton: NSButton?
-    /// Der LAN-Port, der zur (W)LAN-Verbindung auf dem Androidgerät geöffnet werden soll.
-    var lanPort = 5555
+    /*/// Der Knopf zum direkten Verbinden über (W)LAN.
+    var skipButton: NSButton?*/
+    /*/// Der LAN-Port, der zur (W)LAN-Verbindung auf dem Androidgerät geöffnet werden soll.
+    var lanPort = 5555*/
     /// Die zuletzt durchgeführte Aktion.
     var lastAction: Action? = nil
     /// Ein Wahrheitswert, mit dem ein Bremse bei der Trennung der USB-Verbindung realisiert
     /// wird.
     var first: Bool = true
-    /// Die zentralen Einstellungen dieses Programms.
-    let settings = Settings()
-    let devicesList = NSStackView(views: [])
+    //let devicesList = NSStackView(views: [])
     let nameField = NSTextField()
     let ipField = NSTextField()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        let s = NSScreen.main?.frame
-        window = NSWindow(contentRect: NSMakeRect(s?.origin.x ?? 0, (s?.height ?? 500) - 1, 685, 60), styleMask: NSWindow.StyleMask(rawValue: NSWindow.StyleMask.closable.rawValue | NSWindow.StyleMask.titled.rawValue | NSWindow.StyleMask.resizable.rawValue | NSWindow.StyleMask.miniaturizable.rawValue | NSWindow.StyleMask.fullSizeContentView.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
-        window.title = "ADB Connector"
-        devicesList.orientation = .vertical
+        /*devicesList.orientation = .vertical
         devicesList.addArrangedSubview(NSButton(title: "Gerät hinzufügen...", target: self, action: #selector(addDevice)))
         let nameLabel = NSTextField(labelWithString: "Gerätename:")
         let ipLabel = NSTextField(labelWithString: "IP-Adresse:")
@@ -57,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let mainView = NSStackView(views: [devicesList, devicesPane])
         mainView.orientation = .horizontal
         //window.contentView = mainView
-        window.contentView = NSHostingView(rootView: MainView())
+        window.contentView = NSHostingView(rootView: MainView())*/
         /*label = NSTextField(labelWithString: "Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen. Bitte Verbindung per USB herstellen.")
         label.drawsBackground = true
         label.backgroundColor = NSColor.clear
@@ -69,12 +64,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let mainGrid = NSStackView(views: [label, gridButtons])
         mainGrid.orientation = .vertical
         window.contentView = mainGrid*/
-        
-        window.makeKeyAndOrderFront(self)
-        
-        // MARK: Menüzeile
+        createMenuBar()
+        showWindow()
+                
+        if canStart() {
+            /*timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)*/
+        } else {
+            //addDevice()
+        }
+    }
+    
+    /// Creates and installs the menubar.
+    func createMenuBar() {
+#if DEBUG
         // NUR ZUM AUFBAUEN!
         let standardAction = #selector(menuChoosen)
+#endif
         // Das erste NSMenu ist die Menüzeile
         let menubar = NSMenu()
         
@@ -105,41 +110,80 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menubar.addItem(deviceMenuBar)
         let deviceMenu = NSMenu(title: "Gerät")
         deviceMenuBar.submenu = deviceMenu
-        //deviceMenu.addItem(withTitle: "IP-Adresse eingeben...", action: #selector(menuSetIPAddress), keyEquivalent: "")
-        //deviceMenu.addItem(withTitle: "Name eingeben...", action: #selector(menuSetDeviceName), keyEquivalent: "")
-        //deviceMenu.addItem(withTitle: "Port ändern...", action: #selector(changePort), keyEquivalent: "")
         deviceMenu.addItem(withTitle: "Hinzufügen...", action: #selector(addDevice), keyEquivalent: "n")
-        NSApp.mainMenu = menubar
         
-        if canStart() {
-            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
-        } else {
-            addDevice()
-        }
+        let windowMenuBar = NSMenuItem(title: "Fenster", action: nil, keyEquivalent: "")
+        let windowMenu = NSMenu(title: "Window")
+        NSApp.windowsMenu = windowMenu
+        windowMenuBar.submenu = windowMenu
+        windowMenu.addItem(withTitle: "Hauptfenster", action: #selector(showWindow), keyEquivalent: "0")
+        menubar.addItem(windowMenuBar)
+        
+        let helpMenuBar = NSMenuItem(title: "Hilfe", action: nil, keyEquivalent: "")
+        let helpMenu = NSMenu(title: "Hilfe")
+        NSApp.helpMenu = helpMenu
+        helpMenuBar.submenu = helpMenu
+        helpMenu.addItem(withTitle: "ADB Connector Hilfe", action: standardAction, keyEquivalent: "?")
+        menubar.addItem(helpMenuBar)
+        
+        NSApp.mainMenu = menubar
+    }
+    
+    /// Creates and shows the main window of this application.
+    @objc func showWindow() {
+        window = createWindow()
+        window.makeKeyAndOrderFront(nil)
+    }
+    
+    /// Creates the main window of this application.
+    func createWindow() -> NSWindow {
+        let contentView = MainView(settings: Settings.shared)
+        let toReturn = NSWindow(contentRect: NSMakeRect(0, 0, 685, 60), styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
+        toReturn.center()
+        toReturn.setFrameAutosaveName("ADB Connector")
+        toReturn.title = "ADB Connector"
+        toReturn.contentView = NSHostingView(rootView: contentView)
+        toReturn.isReleasedWhenClosed = false
+        return toReturn
     }
     
     /// Fügt ein Androidgerät der Liste hinzu.
     @objc func addDevice() {
         if let name = setDeviceName(cancellable: true) {
-            settings.devices.append(Device(name: name, ipAddress: setIPAddress(userInfo: nil, cancellable: true)))
-            if devicesList.views.count == 1 && (devicesList.views[0] as? NSButton)?.title == "Gerät hinzufügen..." {
-                devicesList.removeView(devicesList.views[0])
-            }
-            let deviceLabel = NSButton(title: name, target: self, action: #selector(selectDevice(_:)))
-            devicesList.addArrangedSubview(deviceLabel)
+            Settings.shared.devices.append(Device(name: name, ipAddress: setIPAddress(userInfo: nil, cancellable: true)))
+        /*if devicesList.views.count == 1 && (devicesList.views[0] as? NSButton)?.title == "Gerät hinzufügen..." {
+                devicesList.removeView(devicesList.views[0])*/
+            //}
+            //let deviceLabel = NSButton(title: name, target: self, action: #selector(selectDevice(_:)))
+            //devicesList.addArrangedSubview(deviceLabel)
         }
     }
     
-    @objc func selectDevice(_ device: Device) {
+    /// Deletes the device with the given index from the list, if the user confirms it.
+    ///
+    /// - Returns: The choice given by the user.
+    func deleteDevice(indexOf device: Int) -> Bool {
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = "Möchten Sie das Gerät \"\(Settings.shared.devices[device].deviceName)\" wirklich entfernen?"
+        alert.informativeText = "Dieser Vorgang kann nicht widerrufen werden."
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        if alert.runModal() == .alertFirstButtonReturn {
+            Settings.shared.devices.remove(at: device)
+            return true
+        }
+        return false
+    }
+    
+    /*@objc func selectDevice(_ device: Device) {
         print(device)
-    }
+    }*/
     
-    /// Zeigt das Fenster für die Einstellungen an. Dieses wird bei Bedarf erzeugt.
+    /// Shows the window for the settings, which will be created.
     @objc func showSettings() {
-        if settingsWindow == nil {
-            settingsWindow = createSettingsDialog()
-        }
-        NSApp.runModal(for: settingsWindow!)
+        let sw = createSettingsDialog()
+        NSApp.runModal(for: sw)
     }
     
     /// Zeigt einen Dialog, in dem der Nutzer den zu verwendenden Port ändern kann.
@@ -150,13 +194,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.informativeText = "Dieser Port wird verwendet, um das Androidgerät darüber zu verbinden."
         let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
         alert.accessoryView = textField
-        textField.stringValue = "\(lanPort)"
+        textField.stringValue = Settings.shared.standardLANPortString
         textField.selectText(self)
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
         alert.window.initialFirstResponder = textField
         if alert.runModal() == .alertFirstButtonReturn {
-            lanPort = Int(textField.stringValue) ?? lanPort
+            //settings.standardLANPort = Int(textField.stringValue) ?? settings.standardLANPort
+            Settings.shared.standardLANPortString = textField.stringValue
         }
     }
     
@@ -165,23 +210,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// - Returns: Ob alle Einstellungen, die nötig sind, eingestellt sind.
     private func canStart() -> Bool {
         //return deviceName != nil && deviceName != nil
-        return !settings.devices.isEmpty
+        return !Settings.shared.devices.isEmpty
     }
     
-    /// Stellt den Namen des Geräts ein. Wird vom Nutzer ausgelöst.
-    @objc func menuSetDeviceName() {
-        deviceName = setDeviceName(cancellable: true) ?? deviceName
-    }
-    
-    /// Stellt die IP-Addresse des Androidgeräts ein. Wird vom Nutzer ausgelöst.
-    @objc func menuSetIPAddress() {
-        ipAddress = setIPAddress(userInfo: nil, cancellable: true) ?? ipAddress
-    }
-    
+#if DEBUG
     /// Nur zum Aufbau des GUIs.
     @objc func menuChoosen() {
         print("Menü betätigt!")
     }
+#endif
     
     /// Befragt den Nutzer nach dem Namen seines Androidgeräts. Sollte der Nutzer den Dialog
     /// abbrechen, wird nil zurückgegeben. Standardmäßig kann der Dialog nicht abgebrochen
@@ -197,9 +234,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.messageText = "Bitte den Gerätenamen eingeben:"
         alert.informativeText = "Dies ist der Name des Geräts, wenn es per USB verbunden wird."
         let textField = NSTextField(frame: NSMakeRect(0, 0, 200, 20))
-        if let dn = deviceName {
+        /*if let dn = deviceName {
             textField.stringValue = dn
-        }
+        }*/
         alert.accessoryView = textField
         alert.addButton(withTitle: "OK")
         if cancellable {
@@ -221,6 +258,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///
     /// - Returns: Ob das Androidgerät getrennt wurde
     private func disconnectUSB() -> Bool {
+        // MARK: deviceName ist hier nur ein Platzhalter! Erstetzen!!!
+        let deviceName: String? = "ihr Gerät"
         if blinkON {
             inform("Bitte USB-Verbindung von \(deviceName!) trennen.", .no_flag)
             blinkON = false
@@ -404,6 +443,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///
     /// - Returns: Ob das Androidgerät mit der ADB verbunden ist.
     private func checkWLANConnection() -> Bool {
+        // MARK: deviceName & ipAddress sind hier nur Platzhalter! Ersetzen!!!
+        let deviceName: String? = "ihr Gerät"
+        let ipAddress: String? = "127.0.0.1"
         inform("WLAN-Verbindung mit \(deviceName!) (\(ipAddress!)) wird überprüft...", .no_flag)
         let ioText = execADB("devices", "-l")
         if ioText.contains(ipAddress!) {
@@ -423,7 +465,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig
     /// false).
     /// - Returns: Die vom Nutzer eingegebene IP-Adresse oder nil bei Abbruch.
-    private func setIPAddress(userInfo: String?, cancellable: Bool = false) -> String? {
+    private func setIPAddress(userInfo: String?,
+                              cancellable: Bool = false,
+                              deviceName: String? = nil,
+                              ipAddress: String? = nil) -> String? {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.messageText = "Bitte die IP-Adresse von \(deviceName ?? "ihrem Gerät") eingeben:"
@@ -435,7 +480,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         alert.addButton(withTitle: "OK")
         if cancellable {
-            alert.addButton(withTitle: "Cancel")
+            alert.addButton(withTitle: "Nicht setzen")
         }
         alert.window.initialFirstResponder = textField
         if alert.runModal() == .alertSecondButtonReturn {
@@ -449,11 +494,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///
     /// - Returns: Ob das Androidgerät erolgreich verbunden wurde.
     private func connectWLAN() -> Bool {
+        // MARK: deviceName & ipAddress sind hier nur Platzhalter! Ersetzen!!!
+        let deviceName: String? = "ihr Gerät"
+        var ipAddress: String? = "127.0.0.1"
         if ipAddress == nil {
             ipAddress = setIPAddress(userInfo: nil)
         }
         inform("WLAN-Verbindung mit \(deviceName!) wird aufgebaut...", .no_flag)
-        let ioText = execADB("connect", "\(ipAddress!):\(lanPort)")
+        let ioText = execADB("connect", "\(ipAddress!):\(Settings.shared.standardLANPort)")
         if /*ioText.contains("unable") && ioText.contains("connect")*/ioText.contains("missing port") {
             timer.invalidate()
             inform("Falsche IP-Addresse", .error)
@@ -474,13 +522,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// - Returns: Ob der Port erfolgreich geöffnet wurde
     private func openLANPort() -> Bool {
         inform("LAN-Port wird geöffnet...", .no_flag)
-        let ioText = execADB("tcpip", "\(lanPort)")
+        let ioText = execADB("tcpip", Settings.shared.standardLANPortString)
         if ioText.contains("error") {
             inform("adb konnte LAN-Port nicht öffnen!", .error)
             return false
         }
         if ioText.contains("restarting") && ioText.contains("TCP mode") {
-            inform("LAN-Port erfolgreich geöffnet. Port: \(lanPort)", .success)
+            inform("LAN-Port erfolgreich geöffnet. Port: \(Settings.shared.standardLANPort)", .success)
             return true
         }
         return false
@@ -492,7 +540,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if lastAction == Action.connectUSB || lastAction == Action.disconnectUSB {
             timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectWLAN), userInfo: nil, repeats: true)
-            skipButton?.isEnabled = false
+            //skipButton?.isEnabled = false
         }
     }
     
@@ -505,6 +553,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///
     /// - Returns: Ob das Gerät gefunden wurde.
     private func connectUSB() -> Bool {
+        // MARK: deviceName ist hier nur ein Platzhalter! Ersetzen!!!
+        let deviceName: String? = "ihr Gerät"
         inform("Es wird nach \(deviceName ?? "Gerätename") gesucht...", .no_flag)
         let ioText = execADB("devices", "-l")
         if ioText.contains(deviceName!) {
@@ -569,20 +619,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///
     /// - Returns: Das gerade erzeugte Fenster mit den Einstellungen.
     private func createSettingsDialog() -> NSWindow {
-        let toReturn = NSWindow(contentRect: NSMakeRect(/*window.frame.origin.x + (window.frame.width / 2), window.frame.origin.y + (window.frame.height / 2)*/0, 0, 200, 75), styleMask: NSWindow.StyleMask(rawValue: NSWindow.StyleMask.closable.rawValue | NSWindow.StyleMask.titled.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
+        /*let toReturn = NSWindow(contentRect: NSMakeRect(/*window.frame.origin.x + (window.frame.width / 2), window.frame.origin.y + (window.frame.height / 2)*/0, 0, 200, 75), styleMask: NSWindow.StyleMask(rawValue: NSWindow.StyleMask.closable.rawValue | NSWindow.StyleMask.titled.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
         toReturn.title = "Einstellungen"
         let ipLabel = NSTextField(labelWithString: "Die IP-Adresse des Androidgeräts:")
         let nameLabel = NSTextField(labelWithString: "Der Name des Androidgeräts:")
         let portLabel = NSTextField(labelWithString: "Der für die Verbindung zu verwendende Port:")
-        let ipField = NSTextField(string: ipAddress ?? "")
+        let ipField = NSTextField(string: /*ipAddress ?? */"")
         ipField.placeholderString = "192.168.1.1 oder Mein-Gerät.local"
-        let nameField = NSTextField(string: deviceName ?? "")
+        let nameField = NSTextField(string: /*deviceName ?? */"")
         nameField.placeholderString = "Gerätemodell oder Name"
-        let portField = NSTextField(string: "\(lanPort)")
+        let portField = NSTextField(string: settings.standardLANPortString)
         portField.placeholderString = "Eine Nummer, z. B. 5555"
         let gridView = NSStackView(views: [nameLabel, nameField, ipLabel, ipField, portLabel, portField])
         gridView.orientation = .vertical
         toReturn.contentView = gridView
+        let swd = SettingsWindowDelegate()
+        toReturn.delegate = swd
+        return toReturn*/
+        let contentView = SettingsView()
+        let toReturn = NSWindow(contentRect: NSMakeRect(0, 0, 200, 75), styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        toReturn.center()
+        toReturn.setFrameAutosaveName("Einstellungen")
+        toReturn.title = "Einstellungen"
+        toReturn.contentView = NSHostingView(rootView: contentView)
+        toReturn.isReleasedWhenClosed = false
         let swd = SettingsWindowDelegate()
         toReturn.delegate = swd
         return toReturn

@@ -18,6 +18,8 @@
 		BF207302231FAB9800416162 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF207301231FAB9800416162 /* Device.swift */; };
 		BF2CF4C7231D28E2005455D9 /* SettingsWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2CF4C6231D28E2005455D9 /* SettingsWindowDelegate.swift */; };
 		BF4D643723547AA8004151E5 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4D643623547AA8004151E5 /* MainView.swift */; };
+		BF5F02A023DB074D006D3A6F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5F029F23DB074D006D3A6F /* SettingsView.swift */; };
+		BFC9EF9E238D463200D430E2 /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9EF9D238D463200D430E2 /* DeviceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		BF207301231FAB9800416162 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		BF2CF4C6231D28E2005455D9 /* SettingsWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowDelegate.swift; sourceTree = "<group>"; };
 		BF4D643623547AA8004151E5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		BF5F029F23DB074D006D3A6F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BFC9EF9D238D463200D430E2 /* DeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +111,8 @@
 		BF1180E222C0BA4300D3353C /* Anroid Debug Brige Connector */ = {
 			isa = PBXGroup;
 			children = (
+				BF5F029F23DB074D006D3A6F /* SettingsView.swift */,
+				BFC9EF9D238D463200D430E2 /* DeviceView.swift */,
 				BF0EEDDE22DF2288007A3714 /* Anroid Debug Brige Connector.entitlements */,
 				BF2CF4C6231D28E2005455D9 /* SettingsWindowDelegate.swift */,
 				BF1180E322C0BA4300D3353C /* AppDelegate.swift */,
@@ -204,7 +210,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = "Manuel Hahn";
 				TargetAttributes = {
 					BF1180DF22C0BA4300D3353C = {
@@ -278,8 +284,10 @@
 			files = (
 				BF207300231FA78100416162 /* Settings.swift in Sources */,
 				BF4D643723547AA8004151E5 /* MainView.swift in Sources */,
+				BFC9EF9E238D463200D430E2 /* DeviceView.swift in Sources */,
 				BF1180E422C0BA4300D3353C /* AppDelegate.swift in Sources */,
 				BF0BC09522C2248600909D03 /* Action.swift in Sources */,
+				BF5F02A023DB074D006D3A6F /* SettingsView.swift in Sources */,
 				BF2CF4C7231D28E2005455D9 /* SettingsWindowDelegate.swift in Sources */,
 				BF07D73422C4B6AE000D2461 /* Mode.swift in Sources */,
 				BF207302231FAB9800416162 /* Device.swift in Sources */,
@@ -323,6 +331,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -370,7 +379,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -384,6 +393,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -425,7 +435,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -438,6 +448,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = F9JP96DAHT;
@@ -457,6 +468,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = F9JP96DAHT;
