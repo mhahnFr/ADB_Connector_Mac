@@ -465,7 +465,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// - Parameter cancellable: Ob ein Abbruchsknopf angezeigt werden soll (standardmäßig
     /// false).
     /// - Returns: Die vom Nutzer eingegebene IP-Adresse oder nil bei Abbruch.
-    private func setIPAddress(userInfo: String?,
+    public func setIPAddress(userInfo: String?,
                               cancellable: Bool = false,
                               deviceName: String? = nil,
                               ipAddress: String? = nil) -> String? {

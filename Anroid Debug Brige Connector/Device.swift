@@ -119,6 +119,8 @@ import SwiftUI
         lastConnectingAction = .openLANPort
     }
     
+    /// Checks wether the device is disconnected. If this is not the case, a timer for continuously checking is started. Once the
+    /// device is disconnected, the next step in the connection process is started.
     @objc private func timerDisconnectUSB() {
         if disconnectUSB() {
             lastConnectingAction = .disconnectUSB
@@ -134,6 +136,7 @@ import SwiftUI
         lastConnectingAction = .disconnectUSB
     }
     
+    /// Tries to connect the device using (W)LAN. If it was successful, the connection will be checked by another timer.
     @objc private func timerConnectWLAN() {
         if connectWLAN() {
             timer?.invalidate()
@@ -146,6 +149,7 @@ import SwiftUI
         }
     }
     
+    /// Checks if the connection of this device is established.
     @objc private func timerCheckWLANConnection() {
         if checkWLANConnection() {
             mode = .success
@@ -156,6 +160,8 @@ import SwiftUI
         }
     }
     
+    /// Makes the text in its associated view blink green. It meanwhile checks the establishement of the connection. If the
+    /// connection is interrupted, the control is given back to the checking method.
     @objc private func blinkGreen() {
         if greenCounter < 10 {
             if !checkWLANConnection() {
