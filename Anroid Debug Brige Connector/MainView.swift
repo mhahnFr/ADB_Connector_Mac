@@ -29,18 +29,22 @@ struct MainView: View {
                 Button(action: { self.appDelegate?.addDevice() }) {
                     Text("Hinzufügen...")
                 }
-            }
-            VStack {
-                DeviceView(device: settings.devices[selectedDevice])
-                Button(action: {
-                    if self.appDelegate?.deleteDevice(indexOf: self.selectedDevice) ?? false {
-                        if self.selectedDevice > 0 {
-                            self.selectedDevice -= 1
+            }.padding()
+            HStack {
+                Spacer()
+                VStack {
+                    DeviceView(device: settings.devices[selectedDevice])
+                    Button(action: {
+                        if self.appDelegate?.deleteDevice(indexOf: self.selectedDevice) ?? false {
+                            if self.selectedDevice > 0 {
+                                self.selectedDevice -= 1
+                            }
                         }
+                    }) {
+                        Text("Löschen...")
                     }
-                }) {
-                    Text("Löschen...")
                 }
+                Spacer()
             }
         }
     }

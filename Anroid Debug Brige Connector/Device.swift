@@ -35,7 +35,9 @@ import SwiftUI
     var userMessage = ""
     /// The mode in which the message has to be displayed.
     var mode = Mode.no_flag
+    /// The indicator wether blinking message should flash this time or not.
     var blinkON = false
+    /// A counter for how often to blink green when succesfully connected.
     var greenCounter = 0
     
     /// Initialisiert die Repräsentation. Sollte der Name ein leerer String sein, wird
@@ -66,12 +68,38 @@ import SwiftUI
         self.init(name: name, ipAddress: nil)
     }
 
+    /// Initiates the connection process. Asks the user for the ip address if necessary.
+    public func startConnecting() {
+        if lastConnectingAction == nil {
+            if ipAddress == nil {
+                // Braucht Überarbeitung!!!
+                let address = (NSApp.delegate as? AppDelegate)?.setIPAddress(userInfo: nil, cancellable: true, deviceName: deviceName, ipAddress: nil)
+                if address == nil {
+                    return
+                }
+            }
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
+        } else {
+            let alert = NSAlert()
+            alert.alertStyle = .informational
+            alert.messageText = "Soll der Verbindungsprozess abgebrochen werden?"
+            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: "Cancel")
+            if alert.runModal() == .alertFirstButtonReturn {
+                timer?.invalidate()
+                mode = .no_flag
+                userMessage = ""
+            }
+        }
+    }
+    
     /// Starts the connection process.
-    @objc public func startConnecting() {
+    @objc private func timerConnectUSB() {
         if connectUSB() {
             lastConnectingAction = .connectUSB
             timerOpenLANPort()
         }
+        lastConnectingAction = .connectUSB
     }
     
     /// Tries to open the specified LAN-Port on this device. If it fails, a timer is started to try it again. Otherwise the next step
@@ -151,10 +179,20 @@ import SwiftUI
     ///
     /// - Returns: Wether the device was found in the list.
     private func connectUSB() -> Bool {
+        mode = .no_flag
+        userMessage = "Es wird nach \(deviceName) gesucht..."
         let ioText = execADB("devices", "-l")
         if ioText.contains(deviceName) {
             return true
         }
+        if blinkON {
+            mode = .no_flag
+            blinkON = false
+        } else {
+            mode = .warning
+            blinkON = true
+        }
+        userMessage = "Bitte Verbindung per USB herstellen."
         return false
     }
     

@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct DeviceView: View {
+    /// The Android device associated with this view.
     @ObservedObject
     var device: Device
     
