@@ -12,6 +12,8 @@ import SwiftUI
 class AppDelegate: NSObject, NSApplicationDelegate {
     /// Das Hauptfenster.
     var window: NSWindow!
+    /// The content view that is assigned to the main window of this app.
+    let contentView = MainView(settings: Settings.shared)
     /*/// Das Fenster für die Einstellungen.
     var settingsWindow: NSWindow?*/
     /// Der Pfad zur Android Debug Bridge (adb).
@@ -110,6 +112,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menubar.addItem(deviceMenuBar)
         let deviceMenu = NSMenu(title: "Gerät")
         deviceMenuBar.submenu = deviceMenu
+        // Menu like this: '"device name" verbinden'
         deviceMenu.addItem(withTitle: "Hinzufügen...", action: #selector(addDevice), keyEquivalent: "n")
         
         let windowMenuBar = NSMenuItem(title: "Fenster", action: nil, keyEquivalent: "")
@@ -137,7 +140,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Creates the main window of this application.
     func createWindow() -> NSWindow {
-        let contentView = MainView(settings: Settings.shared)
         let toReturn = NSWindow(contentRect: NSMakeRect(0, 0, 685, 60), styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
         toReturn.center()
         toReturn.setFrameAutosaveName("ADB Connector")

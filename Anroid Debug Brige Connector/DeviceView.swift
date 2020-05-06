@@ -29,7 +29,7 @@ struct DeviceView: View {
             Button(action: {
                 self.device.startConnecting()
             }) {
-                Text("Verbinden")
+                Text(device.buttonText)
             }
         }
     }

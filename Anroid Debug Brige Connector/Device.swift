@@ -33,6 +33,9 @@ import SwiftUI
     /// A message that is continually displayed in the view of this device.
     @Published
     var userMessage = ""
+    /// The text that has to be written on the start the connection button.
+    @Published
+    var buttonText = "Verbinden"
     /// The mode in which the message has to be displayed.
     var mode = Mode.no_flag
     /// The indicator wether blinking message should flash this time or not.
@@ -78,6 +81,7 @@ import SwiftUI
                     return
                 }
             }
+            buttonText = "Abbrechen..."
             timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectUSB), userInfo: nil, repeats: true)
         } else {
             let alert = NSAlert()
@@ -89,6 +93,8 @@ import SwiftUI
                 timer?.invalidate()
                 mode = .no_flag
                 userMessage = ""
+                lastConnectingAction = nil
+                buttonText = "Verbinden"
             }
         }
     }
