@@ -29,6 +29,7 @@ import SwiftUI
     /// The timer needed for the connection process.
     var timer: Timer?
     /// The last action that has been done during the connection process. If no action is set, the connection process has not yet started.
+    @Published
     var lastConnectingAction: Action?
     /// A message that is continually displayed in the view of this device.
     @Published
@@ -72,7 +73,7 @@ import SwiftUI
     }
 
     /// Initiates the connection process. Asks the user for the ip address if necessary.
-    public func startConnecting() {
+    @objc public func startConnecting() {
         if lastConnectingAction == nil {
             if ipAddress == nil {
                 // Braucht Überarbeitung!!!
@@ -97,6 +98,16 @@ import SwiftUI
                 buttonText = "Verbinden"
             }
         }
+    }
+    
+    /// Asks the user if he wishes to skip the connection activities that are using USB.
+    func skipUSBConnection() {
+        // Ask the user with the option to suppress the dialog.
+        timer?.invalidate()
+        mode = .no_flag
+        userMessage = ""
+        lastConnectingAction = .connectWLAN
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectWLAN), userInfo: nil, repeats: true)
     }
     
     /// Starts the connection process.
@@ -156,7 +167,7 @@ import SwiftUI
     }
     
     /// Checks if the connection of this device is established.
-    @objc private func timerCheckWLANConnection() {
+    @objc func timerCheckWLANConnection() {
         if checkWLANConnection() {
             mode = .success
             userMessage = "Verbunden."
@@ -289,12 +300,13 @@ import SwiftUI
         mode = .no_flag
         userMessage = "WLAN-Verbindung mit \(deviceName) wird aufgebaut..."
         let ioText = execADB("connect", "\(ipAddress!):\(lanPort ?? Settings.shared.standardLANPort)")
-        if ioText.contains("missing port") {
+        if ioText.contains("missing port") || ioText.contains("failed to connect to") {
             timer?.invalidate()
             mode = .error
-            userMessage = "Falsche IP-Adresse"
-            // Prompt user to enter correct IP-address or to abort the processs.
-            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerConnectWLAN), userInfo: nil, repeats: true)
+            userMessage = "Port (noch) nicht geöffnet - bitte per USB verbinden."
+            _ = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: false) {_ in
+                self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.timerConnectUSB), userInfo: nil, repeats: true)
+            }
             return false
         }
         if ioText.contains("connected") {

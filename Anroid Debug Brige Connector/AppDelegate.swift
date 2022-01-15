@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Das Hauptfenster.
     var window: NSWindow!
     /// The content view that is assigned to the main window of this app.
-    let contentView = MainView(settings: Settings.shared)
+    //var contentView = MainView(settings: Settings.shared)
     /*/// Das Fenster für die Einstellungen.
     var settingsWindow: NSWindow?*/
     /// Der Pfad zur Android Debug Bridge (adb).
@@ -112,7 +112,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menubar.addItem(deviceMenuBar)
         let deviceMenu = NSMenu(title: "Gerät")
         deviceMenuBar.submenu = deviceMenu
-        // Menu like this: '"device name" verbinden'
+        deviceMenu.addItem(withTitle: "Verbinden...", action: #selector(connectCurrentDevice), keyEquivalent: "c")
         deviceMenu.addItem(withTitle: "Hinzufügen...", action: #selector(addDevice), keyEquivalent: "n")
         
         let windowMenuBar = NSMenuItem(title: "Fenster", action: nil, keyEquivalent: "")
@@ -132,6 +132,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.mainMenu = menubar
     }
     
+    /// Starts the connection process with the device currently displayed.
+    @objc func connectCurrentDevice() {
+        if let cv = (window.contentView as? NSHostingView<MainView>)?.rootView {
+            Settings.shared.devices[cv.selectedDevice].startConnecting()
+        }
+    }
+    
     /// Creates and shows the main window of this application.
     @objc func showWindow() {
         window = createWindow()
@@ -144,7 +151,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         toReturn.center()
         toReturn.setFrameAutosaveName("ADB Connector")
         toReturn.title = "ADB Connector"
-        toReturn.contentView = NSHostingView(rootView: contentView)
+        toReturn.contentView = NSHostingView(rootView: MainView())
         toReturn.isReleasedWhenClosed = false
         return toReturn
     }

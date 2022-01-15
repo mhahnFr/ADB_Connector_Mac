@@ -18,7 +18,7 @@ struct MainView: View {
     /// A reference to the NSApplicationDelegate for convience.
     let appDelegate = (NSApp.delegate as? AppDelegate)
     
-    var body: some View {
+    /*var body: some View {
         HStack {
             VStack {
                 List(settings.devices) { device in
@@ -45,6 +45,16 @@ struct MainView: View {
                     }
                 }
                 Spacer()
+            }
+        }
+    }*/
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(settings.devices) { device in
+                    
+                }
+                // ANzahl!
             }
         }
     }

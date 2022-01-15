@@ -13,7 +13,7 @@ struct DeviceView: View {
     @ObservedObject
     var device: Device
     
-    var body: some View {
+    /*var body: some View {
         VStack {
             Text(device.deviceName)
                 .bold()
@@ -26,11 +26,25 @@ struct DeviceView: View {
                 Text("Nicht verbunden")
             }
             showUserMessage()
-            Button(action: {
-                self.device.startConnecting()
-            }) {
-                Text(device.buttonText)
+            HStack {
+                Button(action: {
+                    self.device.startConnecting()
+                }) {
+                    Text(device.buttonText)
+                }
+                if device.lastConnectingAction != .connectWLAN && device.lastConnectingAction != .checkWLANConnection && device.lastConnectingAction != nil {
+                    Button(action: {
+                        self.device.skipUSBConnection()
+                    }) {
+                        Text(">>")
+                    }
+                }
             }
+        }
+    }*/
+    var body: some View {
+        NavigationLink(destination: Text(device.deviceName)) {
+            
         }
     }
     
