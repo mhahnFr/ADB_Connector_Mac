@@ -24,3 +24,5 @@ As Android Studio has these days such a feature built in, this project will not
 be developed any further.
 
 © 2019 [mhahnFr](https://www.github.com/mhahnFr)
+
+[ADB Connector]: https://www.github.com/mhahnFr/ADB_Connector
